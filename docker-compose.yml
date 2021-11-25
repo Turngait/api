@@ -1,0 +1,42 @@
+version: '3.1'
+
+services:
+  api-php8:
+    container_name: roga-api
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    restart: always
+    working_dir: /var/www/html
+    environment:
+      - APACHE_RUN_USER=#1000
+      - WRITE_DB_CLUSTER=${WRITE_DB_CLUSTER}
+      - READ_DB_CLUSTER=${READ_DB_CLUSTER}
+      - DB_NAME=${DB_NAME}
+      - DB_PASS=${MYSQL_ROOT_PASS}
+    volumes:
+      - ./api:/var/www/html
+    ports:
+      - 8081:80
+    depends_on: 
+      - db
+
+  db:
+    image: mysql:latest
+    container_name: roga-db
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    volumes:
+      - ./sql:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASS}
+
+  myadmin:
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    links:
+      - db
+    ports:
+      - 8082:80
+    depends_on: 
+      - db
