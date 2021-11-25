@@ -2,6 +2,9 @@
 
 class CommentsException extends Exception {}
 
+/**
+ *  Тестовый класс для работы с комментами
+ */
 class Comment
 {
     private ?int $_id;
@@ -51,6 +54,10 @@ class Comment
       return $this->_email;
     }
 
+    /**
+    * @param int $id
+    * @return void
+    */
     public function setID(?int $id): void
     {
       if(($id !== null && !is_numeric($id)) || $id === 0) {
@@ -60,6 +67,10 @@ class Comment
       $this->_id = $id;
     }
 
+    /**
+    * @param string $title
+    * @return void
+    */
     public function setTitle(string $title): void
     {
       if(strlen($title) >= 255 && strlen($title) <= 0) {
@@ -69,6 +80,10 @@ class Comment
       $this->_title = $title;
     }
 
+    /**
+    * @param string $text
+    * @return void
+    */
     public function setText(string $text): void
     {
       if(strlen($text) <= 0) {
@@ -78,6 +93,10 @@ class Comment
       $this->_text = $text;
     }
 
+    /**
+    * @param string $userName
+    * @return void
+    */
     public function setUserName(string $userName): void
     {
       if(strlen($userName) >= 255 && strlen($userName) <= 0) {
@@ -87,6 +106,10 @@ class Comment
       $this->_userName = $userName;
     }
 
+    /**
+    * @param string $date
+    * @return void
+    */
     public function setDate(string $date): void
     {
       if($date !== null && date_format(date_create_from_format('d/m/Y H:i', $date), 'd/m/Y H:i') !== $date) {
@@ -96,6 +119,10 @@ class Comment
       $this->_date = $date;
     }
 
+    /**
+    * @param string $email
+    * @return void
+    */
     public function setEmail(string $email): void
     {
       // if(strlen($userName) >= 255 && strlen($userName) <= 0) {
@@ -105,7 +132,11 @@ class Comment
       $this->_email = $email;
     }
 
-    public function getCommentAsArray()
+    /**
+    * Отдает коммент как ассоциативный массив
+    * @return array
+    */
+    public function getCommentAsArray(): array
     {
       $comment = [];
       $comment['id'] = $this->_id;

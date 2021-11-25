@@ -1,4 +1,8 @@
 <?php
+/**
+* Эндпоинт для работы с комментами
+*/
+
 // Подумать про замену на автолоадинг
 require_once 'controllers/CommentController.php';
 require_once 'providers/DB.php';

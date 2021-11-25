@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Создает соединения с кластерами БД
+ */
 class DB
 {
     private static $_writeDBConnection;
@@ -7,6 +10,12 @@ class DB
     private static $_readDBConnectionString;
     private static $_writeDBConnectionString;
 
+    /**
+    * Подготовка перед создания подключения.
+    *
+    * @param void
+    * @return void
+    */
     private static function prepare(): void
     {
       if(!isset($_ENV['DB_NAME']) || !isset($_ENV['READ_DB_CLUSTER']) || !isset($_ENV['WRITE_DB_CLUSTER'])) {
@@ -16,6 +25,10 @@ class DB
       self::$_writeDBConnectionString = 'mysql:host='.$_ENV['WRITE_DB_CLUSTER'].';dbname='.$_ENV['DB_NAME'].';charset=utf8';
     }
 
+    /**
+    * Создает соединение с БД кластером для внесения записей
+    * @return PDO
+    */
     private static function createWriteConnection(): PDO
     {
       if(self::$_writeDBConnection === null) {
@@ -27,6 +40,10 @@ class DB
       return self::$_writeDBConnection;
     }
 
+    /**
+    * Создает соединение с БД кластером для чтения
+    * @return PDO
+    */
     private static function createReadConnection(): PDO
     {
       if(self::$_readDBConnection === null) {
@@ -38,6 +55,11 @@ class DB
       return self::$_readDBConnection;
     }
 
+    /**
+    * Возвращает объект PDO
+    * @param string $mode
+    * @return PDO
+    */
     public static function getConnection($mode='read')
     {
       self::prepare();

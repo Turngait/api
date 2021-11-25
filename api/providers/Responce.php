@@ -1,5 +1,8 @@
 <?php
 
+/**
+* Отправляет ответ клиенту
+*/
 class Responce 
 {
     private $_success;
@@ -8,26 +11,46 @@ class Responce
     private $_data;
     private $_responceData = array();
 
+    /**
+    * @param bool $success
+    * @return void
+    */
     public function setSuccess(bool $success): void
     {
       $this->_success = $success;
     }
-
+    
+    /**
+    * @param int $statusCode
+    * @return void
+    */
     public function setStatusCode(int $statusCode): void
     {
       $this->_httpStatusCode = $statusCode;
     }
   
+    /**
+    * @param string $message
+    * @return void
+    */
     public function addMessage(string $message): void
     {
       $this->_messages[] = $message;
     }
 
+    /**
+    * @param mixed $data
+    * @return void
+    */
     public function setData(mixed $data): void
     {
       $this->_data = $data;
     }
 
+    /**
+    * Отправляет ответ клиенту
+    * @return void
+    */
     public function send(): void
     {
       header('Content-type: application/json;charset=utf-8');

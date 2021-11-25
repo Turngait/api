@@ -1,7 +1,9 @@
 <?php
-
 require_once 'controllers/Controller.php';
 
+/**
+ * Тестовый контроллер для сохранения комментов
+ */
 class CommentsController extends Controller
 {
   public function __construct(Responce $responce, PDO $readDB, PDO $writeDB)
@@ -9,6 +11,10 @@ class CommentsController extends Controller
     parent::__construct($responce, $readDB, $writeDB);
   }
 
+  /**
+  * Отправляет все комменты
+  * @return void
+  */
   public function sendAllComments(): void
   {
     $comments = array();
@@ -38,6 +44,10 @@ class CommentsController extends Controller
     }
   }
 
+  /**
+  * Создает новый коммент
+  * @param mixed $data
+  */
   public function saveNewComment(mixed $data)
   {
     // Code
