@@ -37,4 +37,9 @@ class CommentsController extends Controller
       $this->sendError('Exception: ' . $ex->getMessage());
     }
   }
+
+  public function saveNewComment(mixed $data)
+  {
+    // Code
+  }
 }

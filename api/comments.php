@@ -26,8 +26,8 @@ function init() {
   if($_SERVER['REQUEST_METHOD'] === 'GET') {
     $commentController->sendAllComments();
   }
-  elseif ($_SERVER['REQUEST_METHOD'] === 'GET') {
-
+  elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $commentController->saveNewComment([]);
   }
 }
 
