@@ -1,11 +1,12 @@
 <?php
+require_once 'models/Model.php';
 
 class CommentsException extends Exception {}
 
 /**
  *  Тестовый класс для работы с комментами
  */
-class Comment
+class Comment extends Model
 {
     private ?int $_id;
     private string $_title;
@@ -14,8 +15,10 @@ class Comment
     private string $_date;
     private string $_email;
 
-    public function __construct(?int $id, string $title, string $text, string $userName, string $date, string $email)
+    public function __construct(PDO $writeDB, PDO $readDB, string $title, string $text, string $userName, string $date, string $email, ?int $id = null)
     {
+      parent::__construct($writeDB, $readDB);
+      // TODO Перенести валидацию в отдельный слой
       $this->setID($id);
       $this->setTitle($title);
       $this->setText($text);
@@ -147,5 +150,18 @@ class Comment
       $comment['date'] = $this->_date;
 
       return $comment;
+    }
+
+    public function getAllComments()
+    {
+      try {
+        $selectStatement = 'SELECT id, title, text, user_name, email, DATE_FORMAT(date, "%d/%m/%Y %H:%i") as date FROM comments';
+        return $this->selectAllFromTable($selectStatement);
+      }
+      catch (PDOException $ex) {
+        // $this->sendError('Connection error: ' . $ex->getMessage());
+      }
+
+      
     }
 }

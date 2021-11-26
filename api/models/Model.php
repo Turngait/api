@@ -15,9 +15,9 @@ class Model
     $this->readDB = $readDB;
   }
 
-  protected function prepareReadDB(string $insertStatement)
+  protected function prepareReadDB(string $selectStatement)
   {
-    $this->query = $this->readDB->prepare($insertStatement);
+    $this->query = $this->readDB->prepare($selectStatement);
   }
 
   protected function prepareInsertToDB(string $insertStatement): void
@@ -30,7 +30,7 @@ class Model
     $this->query->bindParam($param, $value, $type);
   }
 
-  protected function save(): void
+  protected function execute(): void
   {
     $this->query->execute();
   }
@@ -43,5 +43,17 @@ class Model
   protected function getRowCount(): int
   {
     return $this->query->rowCount();
+  }
+
+  protected function fetchAll(): mixed
+  {
+    return $this->query->fetch(PDO::FETCH_ASSOC);
+  }
+
+  protected function selectAllFromTable(string $selectStatement)
+  {
+    $this->prepareReadDB($selectStatement);
+    $this->execute();
+    return $this->fetchAll();
   }
 }

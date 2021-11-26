@@ -20,7 +20,7 @@ class CommentsController extends Controller
     $comments = array();
 
     try {
-      // Возможно стоило бы эту логику в модели отправить, для как бы реализации патттерна ActiveRocords 
+      // TODO перенести в модель
       $query = $this->_readDB->prepare('SELECT id, title, text, user_name, email, DATE_FORMAT(date, "%d/%m/%Y %H:%i") as date FROM comments');
       $query->execute();
       $rowCount = $query->rowCount();
@@ -30,7 +30,7 @@ class CommentsController extends Controller
       }
 
       while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
-        $comment = new Comment($row['id'], $row['title'], $row['text'], $row['user_name'], $row['date'], $row['email']);
+        $comment = new Comment($this->_writeDB, $this->_readDB, $row['title'], $row['text'], $row['user_name'], $row['date'], $row['email'], $row['id']);
         $comments[] = $comment->getCommentAsArray();
       }
 
@@ -56,7 +56,7 @@ class CommentsController extends Controller
     // Code
     try {
       $this->validatePostData($data);
-      $comment = new Comment(null, $data->title, $data->text, $data->userName, $data->date, $data->email);
+      $comment = new Comment($this->_writeDB, $this->_readDB, $data->title, $data->text, $data->userName, $data->date, $data->email);
       $newComment = $comment->getCommentAsArray();
 
       // TODO перенести в модель
