@@ -40,10 +40,7 @@ class Controller {
   protected function sendError(string $message): void
   {
     error_log($message, 0);
-    $this->_responce->setSuccess(false);
-    $this->_responce->setStatusCode(500);
-    $this->_responce->addMessage(json_encode($message));
-    $this->_responce->send();
+    $this->_responce->sendExceptionError(json_encode($message), 500);
     die();
   }
 }

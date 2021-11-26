@@ -12,6 +12,7 @@ function init() {
     $responce->setStatusCode(200);
     $responce->addMessage('GET - /comments - get all comments');
     $responce->addMessage('POST - /comments - create new comment');
+    $responce->addMessage('Content-type - only JSON');
     $responce->send();
   }
 }

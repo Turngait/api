@@ -112,7 +112,7 @@ class Comment
     */
     public function setDate(string $date): void
     {
-      if($date !== null && date_format(date_create_from_format('d/m/Y H:i', $date), 'd/m/Y H:i') !== $date) {
+      if($date !== null && !date_create_from_format('d/m/Y H:i', $date)) {
         throw new CommentsException('Comment date error');
       }
 
