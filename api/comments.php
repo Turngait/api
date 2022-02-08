@@ -4,36 +4,19 @@
 */
 
 // Подумать про замену на автолоадинг
-require_once 'controllers/CommentController.php';
-require_once 'providers/DB.php';
-require_once 'models/Comment.php';
-require_once 'providers/Responce.php';
 require_once 'middlewares/checkContentType.php';
 
-function init() {
+require_once 'providers/Responce.php';
+require_once 'providers/factories.php';
+require_once 'utils/request.php';
+
+require_once 'models/Comment.php';
+
+function init(): void
+{
   $responce = new Responce();
   checkContentType($responce);
-  useRouting(createCommentsController($responce), $responce, $_SERVER['REQUEST_METHOD']);
-}
-
-/**
- * Возвращает контроллер комментов
- * @param Responce $responce
- * @return CommentsController
- */
-function createCommentsController(Responce $responce): CommentsController
-{
-  try {
-    $readDB = DB::getConnection('read');
-    $writeDB = DB::getConnection('write');
-  }
-  catch (PDOException $ex) {
-    error_log('Connection error: '.$ex->getMessage(), 0);
-    $responce->sendExceptionError($ex->getMessage());
-    die();
-  }
-  
-  return new CommentsController($responce, $readDB, $writeDB);
+  useRouting(Creator::getInstance('comments', $responce), $responce, $_SERVER['REQUEST_METHOD']);
 }
 
 
@@ -54,30 +37,6 @@ function useRouting(CommentsController $commentController, Responce $responce, s
   }
   else {
     $responce->sendExceptionError('Method Not Allowed', 405);
-  }
-}
-
-
-/**
- * Получает данные из запроса, проверяет их наличие и возвращает
- * @param Responce $responce
- * @return array
- */
-function getDataFromRequest(Responce $responce): ?array
-{
-  try {
-    $rawData = file_get_contents('php://input');
-    $data = json_decode($rawData);
-    if (!$data) {
-      $responce->sendExceptionError('Wrong format', 400);
-      die();
-    }
-    return $data;
-  }
-  catch (Exception $ex) {
-    error_log('Exception error: '.$ex->getMessage(), 0);
-    $responce->sendExceptionError($ex->getMessage());
-    die();
   }
 }
 
